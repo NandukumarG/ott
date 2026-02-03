@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>OTT Movies</title>
+    <title>MovieClub – OTT Platform</title>
 
     <!-- Bootstrap -->
     <link
@@ -12,270 +11,301 @@
       rel="stylesheet"
     />
 
-    <!-- Google Font -->
+    <!-- Fonts -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
+      :root {
+        --bg: #0b0b0f;
+        --card: #15151c;
+        --accent: #e50914;
+        --text: #e5e5e5;
+      }
+
+      * {
+        scroll-behavior: smooth;
+      }
+
       body {
-        background-color: #0f0f0f;
-        color: white;
-        font-family: "Poppins", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
       }
 
+      /* ---------- NAVBAR ---------- */
       .navbar {
-        background: linear-gradient(90deg, #1f1f1f, #343434);
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        transition: 0.3s;
+      }
+      .navbar.scrolled {
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+      }
+      .navbar-brand {
+        font-weight: 700;
+        letter-spacing: 0.5px;
       }
 
-      .navbar-brand img {
-        width: 45px;
+      /* ---------- HERO ---------- */
+      .hero {
+        height: 90vh;
+        background:
+          linear-gradient(to right, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.2)),
+          url("salaar.avif") center/cover no-repeat;
+        display: flex;
+        align-items: center;
       }
-
-      .carousel img {
-        height: 450px;
-        object-fit: cover;
-        border-radius: 15px;
+      .hero h1 {
+        font-size: 3.2rem;
+        font-weight: 700;
       }
-
-      h4 {
-        border-left: 5px solid #ff3d00;
-        padding-left: 10px;
+      .hero p {
+        max-width: 480px;
+        color: #ccc;
       }
-
-      .movie-card {
-        transition:
-          transform 0.3s ease,
-          box-shadow 0.3s ease;
+      .hero .btn {
+        background: var(--accent);
         border: none;
-        border-radius: 15px;
-        overflow: hidden;
+        padding: 12px 28px;
+        font-weight: 600;
       }
 
+      /* ---------- SECTION ---------- */
+      .section {
+        padding: 60px 0;
+      }
+      .section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      /* ---------- MOVIE ROW ---------- */
+      .movie-row {
+        display: flex;
+        gap: 18px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+      .movie-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ---------- MOVIE CARD ---------- */
+      .movie-card {
+        min-width: 220px;
+        height: 320px;
+        background: var(--card);
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        transition: 0.35s;
+      }
       .movie-card img {
-        height: 260px;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
       }
-
       .movie-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 30px rgba(255, 61, 0, 0.5);
+        transform: scale(1.08);
+        z-index: 10;
       }
 
-      .card-body {
-        background-color: #1a1a1a;
-        text-align: center;
+      /* Overlay */
+      .movie-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+        opacity: 0;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 15px;
+      }
+      .movie-card:hover .movie-overlay {
+        opacity: 1;
+      }
+      .movie-overlay h6 {
+        font-size: 0.95rem;
+      }
+      .movie-overlay button {
+        background: var(--accent);
+        border: none;
+        font-size: 0.8rem;
       }
 
+      /* ---------- GENRES ---------- */
+      .genre-chip {
+        padding: 14px 22px;
+        border-radius: 30px;
+        background: var(--card);
+        transition: 0.3s;
+        cursor: pointer;
+      }
+      .genre-chip:hover {
+        background: var(--accent);
+      }
+
+      /* ---------- APP PROMO ---------- */
+      .app-box {
+        background: linear-gradient(135deg, #1c1c24, #0f0f14);
+        border-radius: 20px;
+        padding: 40px;
+      }
+
+      /* ---------- FOOTER ---------- */
       footer {
-        background-color: #1a1a1a;
-        padding: 40px 0;
-        margin-top: 50px;
+        background: #050507;
+        padding: 50px 0;
+        border-top: 1px solid #222;
       }
-
       footer a {
         color: #aaa;
         text-decoration: none;
       }
-
       footer a:hover {
-        color: #ff3d00;
+        color: #fff;
       }
 
-      .genre-badge {
-        background-color: #ff3d00;
-        margin-right: 5px;
+      /* ---------- ANIMATION ---------- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: 0.6s;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: none;
       }
     </style>
   </head>
 
   <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-dark py-3">
       <div class="container">
-        <a class="navbar-brand" href="#"> <img src="logo.png" /> Movie-Club</a>
-
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#nav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="nav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#">Watchlist</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Latest</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Genre</a></li>
-          </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" placeholder="Search movies" />
-            <button class="btn btn-danger">Search</button>
-          </form>
-        </div>
+        <a class="navbar-brand" href="#">MovieClub</a>
       </div>
     </nav>
 
-    <!-- CAROUSEL -->
-    <div class="container my-5">
-      <div id="movieCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="salaar.avif" class="d-block w-100" />
-          </div>
-          <div class="carousel-item">
-            <img src="kgf.jpg" class="d-block w-100" />
-          </div>
-          <div class="carousel-item">
-            <img src="avengers.jpg" class="d-block w-100" />
-          </div>
-        </div>
-
-        <button
-          class="carousel-control-prev"
-          data-bs-target="#movieCarousel"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button
-          class="carousel-control-next"
-          data-bs-target="#movieCarousel"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon"></span>
-        </button>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <h1>Unlimited Movies.<br />No Limits.</h1>
+        <p>
+          Watch blockbusters, originals and trending content anytime, anywhere.
+        </p>
+        <button class="btn mt-3">▶ Watch Now</button>
       </div>
-    </div>
+    </section>
 
-    <!-- MOVIE SECTION TEMPLATE -->
-    <div class="container my-5">
-      <!-- TELUGU -->
-      <h4 class="mb-4">Telugu Movies</h4>
-      <div class="row">
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
-            <img src="Kalki_2898_AD.jpg" />
-            <div class="card-body">
-              <h6>Kalki 2898 AD</h6>
-              <span class="badge genre-badge">Sci-Fi</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
+    <!-- CONTENT -->
+    <div class="container">
+      <!-- CONTINUE WATCHING -->
+      <section class="section reveal">
+        <div class="section-title">Continue Watching</div>
+        <div class="movie-row">
+          <div class="movie-card">
             <img src="RRR_Poster.jpg" />
-            <div class="card-body">
+            <div class="movie-overlay">
               <h6>RRR</h6>
-              <span class="badge genre-badge">Action</span>
+              <button class="btn btn-sm">Play</button>
+            </div>
+          </div>
+          <div class="movie-card">
+            <img src="kgf.jpg" />
+            <div class="movie-overlay">
+              <h6>KGF</h6>
+              <button class="btn btn-sm">Play</button>
             </div>
           </div>
         </div>
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
-            <img src="bahubali.jpg" />
-            <div class="card-body">
-              <h6>RRR</h6>
-              <span class="badge genre-badge">Action</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 
-      <!-- KANNADA -->
-      <h4 class="mb-4 mt-5">Kannada Movies</h4>
-      <div class="row">
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
-            <img src="char.webp" />
-            <div class="card-body">
-              <h6>777 Charlie</h6>
-              <span class="badge genre-badge">Drama</span>
-            </div>
+      <!-- TRENDING -->
+      <section class="section reveal">
+        <div class="section-title">Trending Now</div>
+        <div class="movie-row">
+          <div class="movie-card">
+            <img src="salaar.avif" />
+            <div class="movie-overlay"><h6>Salaar</h6></div>
+          </div>
+          <div class="movie-card">
+            <img src="Kalki_2898_AD.jpg" />
+            <div class="movie-overlay"><h6>Kalki</h6></div>
+          </div>
+          <div class="movie-card">
+            <img src="avengers.jpg" />
+            <div class="movie-overlay"><h6>Avengers</h6></div>
           </div>
         </div>
+      </section>
 
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
-            <img src="bagheera.webp" />
-            <div class="card-body">
-              <h6>Bagheera</h6>
-              <span class="badge genre-badge">Thriller</span>
-            </div>
-          </div>
+      <!-- GENRES -->
+      <section class="section reveal">
+        <div class="section-title">Browse by Genre</div>
+        <div class="d-flex flex-wrap gap-3">
+          <div class="genre-chip">Action</div>
+          <div class="genre-chip">Sci-Fi</div>
+          <div class="genre-chip">Drama</div>
+          <div class="genre-chip">Thriller</div>
+          <div class="genre-chip">Romance</div>
         </div>
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/en/6/69/Kantara-_Chapter_1_poster.jpg"
-            />
-            <div class="card-body">
-              <h6>Bagheera</h6>
-              <span class="badge genre-badge">Thriller</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 mb-4">
-          <div class="card movie-card">
-            <img src="https://miro.medium.com/1*V-yHn74-U902R-vzlk0CJw.jpeg" />
-            <div class="card-body">
-              <h6>Bagheera</h6>
-              <span class="badge genre-badge">Thriller</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 
-      <!-- 4 GENRES -->
-      <h4 class="mb-4 mt-5">Popular Genres</h4>
-      <div class="row text-center">
-        <div class="col-md-3">
-          <div class="p-4 bg-danger rounded">Action</div>
+      <!-- APP PROMO -->
+      <section class="section reveal">
+        <div
+          class="app-box d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            <h3>Watch on the go</h3>
+            <p class="text-muted">Download our app and stream anywhere.</p>
+          </div>
+          <button class="btn btn-danger">Get the App</button>
         </div>
-        <div class="col-md-3">
-          <div class="p-4 bg-primary rounded">Comedy</div>
-        </div>
-        <div class="col-md-3">
-          <div class="p-4 bg-success rounded">Romance</div>
-        </div>
-        <div class="col-md-3">
-          <div class="p-4 bg-warning rounded text-dark">Sci-Fi</div>
-        </div>
-      </div>
+      </section>
     </div>
 
     <!-- FOOTER -->
     <footer>
       <div class="container">
         <div class="row">
-          <div class="col-md-4">
-            <h5>OTT Movies</h5>
-            <p>Watch latest movies anytime, anywhere.</p>
-          </div>
-          <div class="col-md-4">
-            <h5>Quick Links</h5>
-            <a href="#">Home</a><br />
-            <a href="#">Genres</a><br />
-            <a href="#">Watchlist</a>
-          </div>
-          <div class="col-md-4">
-            <h5>Follow Us</h5>
-            <a href="#">Instagram</a><br />
-            <a href="#">Twitter</a><br />
-            <a href="#">YouTube</a>
-          </div>
+          <div class="col-md-3"><h6>MovieClub</h6></div>
+          <div class="col-md-3"><a href="#">About</a></div>
+          <div class="col-md-3"><a href="#">Help</a></div>
+          <div class="col-md-3"><a href="#">Terms</a></div>
         </div>
         <hr />
-        <p class="text-center mb-0">© 2026 OTT Movies. All rights reserved.</p>
+        <p class="text-center text-muted mb-0">© 2026 MovieClub</p>
       </div>
     </footer>
+
+    <!-- JS -->
+    <script>
+      /* navbar blur */
+      window.addEventListener("scroll", () => {
+        document
+          .querySelector(".navbar")
+          .classList.toggle("scrolled", window.scrollY > 50);
+      });
+
+      /* reveal on scroll */
+      const reveals = document.querySelectorAll(".reveal");
+      window.addEventListener("scroll", () => {
+        reveals.forEach((r) => {
+          if (r.getBoundingClientRect().top < window.innerHeight - 100) {
+            r.classList.add("active");
+          }
+        });
+      });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
