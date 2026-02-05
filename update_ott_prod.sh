@@ -22,6 +22,6 @@ echo "🏗️ Step 4: Build a fresh Docker image for prod"
 docker build -t ott:prod .
 
 echo "🚀 Step 5: Run the prod container"
-docker run -d -p 8081:80 --name ott-prod ott:prod
+docker run -d -p 8080:80 --name ott-prod ott:prod
 
-echo "✅ DONE: prod Docker is running at http://localhost:8081"
+echo "✅ DONE: prod Docker is running at http://localhost:8080
